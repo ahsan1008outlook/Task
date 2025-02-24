@@ -15,9 +15,9 @@ public static partial class Data
         double lastSkip = 0;
         for (int i = 1; i <= totalGrades; i++)
         {
-            int toSkip = (int)Math.Round(lastSkip); // 4, 8,
+            int toSkip = (int)Math.Round(lastSkip);
 
-            double toTake = (i * distribution) - toSkip; // 4, 8,
+            double toTake = (i * distribution) - toSkip;
             int toTaken = (int)Math.Round(toTake);
 
             var setOfEmployee = employees.Skip(toSkip).Take(toTaken);

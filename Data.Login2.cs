@@ -11,35 +11,54 @@ public static partial class Data
 
         List<Employee> employeesNew = new List<Employee>();
         double lastSkip = 0; // 0, 3.8, 7.6, 11.4, 15.2, 19, 22.8, 26.6
-        for (int i = 1; i <= totalGrades; i++)
+        for (int i = 0; i < totalGrades; i++)
         {
-            double percentage = 1.0 / grades[i -1].PercentageToAssign;
-            double distribution = totalEmployees * percentage; // Number of employees in this grade
+            if(grades[i].PercentageToAssign == 0) continue;
 
-            int toSkip = (int)Math.Round(lastSkip); // 4, 8,
+            double percentage = 1.0 / grades[i].PercentageToAssign;
+            double distribution = totalEmployees * percentage;
 
-            double toTake = (i * distribution) - toSkip; // 4, 8,
-            int toTaken = (int)Math.Round(toTake);
-
-            var setOfEmployee = employees.Skip(toSkip).Take(toTaken);
-            Console.WriteLine("Take {0} Skip {1}", toTaken, toSkip);
-            lastSkip = i * distribution;
-
-
-            foreach (var emp in setOfEmployee)
+            int difference =   (int)Math.Round(lastSkip);
+            if(difference > lastSkip)
             {
-                emp.Grade = grades[i - 1].Name;
-                emp.GradeRank = grades[i - 1].Rank;
-            }
+                distribution += difference - lastSkip;
+                lastSkip = difference;
+            } 
+            // else if(difference < lastSkip) {
+            //     distribution += lastSkip - difference;
+            //     lastSkip = difference;
+            // }
 
-            employeesNew.AddRange(setOfEmployee);
+            int toTaken = (int)Math.Round(distribution);
+            int toSkip = (int)Math.Round(lastSkip);
+
+
+            // if(toTaken >= 1)
+            // {
+                var setOfEmployee = employees.Skip(toSkip).Take(toTaken);
+                Console.WriteLine("Take {0} Skip {1} LastSkip {2} Per% {3} Dist {4}", toTaken, toSkip, lastSkip, percentage, distribution );
+
+                foreach (var emp in setOfEmployee)
+                {
+                    emp.Grade = grades[i].Name;
+                    emp.GradeRank = grades[i].Rank;
+                }
+                employeesNew.AddRange(setOfEmployee);
+            // }
+            
+
+
+            lastSkip += distribution;
+
         }
+        Console.WriteLine("Total " + lastSkip);
 
         // Print the results
         foreach (var emp in employeesNew)
         {
             Console.WriteLine($"{emp.Name} - Grade: {emp.Grade}, Rank: {emp.GradeRank}");
         }
+        Console.WriteLine("Total " + employeesNew.Count);
         return true;
     }
 }

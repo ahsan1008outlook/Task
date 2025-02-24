@@ -23,15 +23,15 @@ public static partial class Data
         List<Grade> grades = new List<Grade>
         {
             new Grade { Name = "AA", Rank = 1, PercentageToAssign = 10 },
-            new Grade { Name = "A+", Rank = 2, PercentageToAssign = 10 },
-            new Grade { Name = "A", Rank = 3, PercentageToAssign = 10 },
+            new Grade { Name = "A+", Rank = 2, PercentageToAssign = 20 },
+            new Grade { Name = "A", Rank = 3, PercentageToAssign = 15 },
             new Grade { Name = "B+", Rank = 4, PercentageToAssign = 10 },
             new Grade { Name = "B", Rank = 5, PercentageToAssign = 10 },
-            new Grade { Name = "C", Rank = 6, PercentageToAssign = 10 },
+            new Grade { Name = "C", Rank = 6, PercentageToAssign = 15 },
             new Grade { Name = "E", Rank = 7, PercentageToAssign = 10 },
-            new Grade { Name = "F", Rank = 8, PercentageToAssign = 10 },
-            new Grade { Name = "G", Rank = 9, PercentageToAssign = 10 },
-            new Grade { Name = "H", Rank = 10, PercentageToAssign = 10 }
+            new Grade { Name = "F", Rank = 8, PercentageToAssign = 5 },
+            new Grade { Name = "G", Rank = 9, PercentageToAssign = 0 },
+            new Grade { Name = "H", Rank = 10, PercentageToAssign = 5 }
         };
         return grades.Take(count).ToList();
     }
