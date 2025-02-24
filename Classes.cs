@@ -12,4 +12,5 @@ public class Grade
 {
     public string Name { get; set; }
     public int Rank { get; set; } // Lower Rank = Higher Grade
+    public int PercentageToAssign { get; set; } 
 }

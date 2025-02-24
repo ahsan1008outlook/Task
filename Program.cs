@@ -4,8 +4,8 @@ class Program
    static void Main()
     {
         // List of Employees with random scores
-        List<Employee> employees = Data.GenerateRandomEmployees(28).OrderBy(x => x.Score).ToList();
-        List<Grade> grades = Data.GenerateGrade(10);
+        List<Employee> employees = Data.GenerateRandomEmployees(25).OrderBy(x => x.Score).ToList();
+        List<Grade> grades = Data.GenerateGrade(5);
 
         // Assign grades to employees
         Data.AssignGrades(employees, grades);
