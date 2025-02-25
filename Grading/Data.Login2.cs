@@ -37,7 +37,7 @@ public static partial class Data
                     emp.GradeRank = grades[i].Rank;
                 }
                 employeesNew.AddRange(setOfEmployee);
-                // Console.WriteLine("Take {0} Skip {1} LastSkip {2} Per% {3} Dist {4} carryForward {5}", toTaken, toSkip, lastSkip, percentage, distribution, carryForward);
+                // Console.WriteLine("Take {0} Skip {1} LastSkipDecimal {2} Per% {3} Dist {4} carryForward {5}", toTaken, toSkip, lastSkip, percentage, distribution, carryForward);
 
             }
             // Handle Carry Forward Decimals
