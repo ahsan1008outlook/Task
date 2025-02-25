@@ -1,49 +1,43 @@
 ﻿namespace MyConsoleApp;
 public static partial class Data
 {
-    public static bool AssignGrades2(List<Employee> employees, List<Grade> grades)
+    public static void AssignGrades2(List<Employee> employees, List<Grade> grades)
     {
         int totalEmployees = employees.Count;
-        int totalGrades = grades.Count;
-      
-        bool result = GradesGreaterThanEmployee(employees, grades);
-        if (result) return result;
+        double lastSkip = 0;
+        int assignedCount = 0;
 
-        List<Employee> employeesNew = new List<Employee>();
-        double lastSkip = 0; // 0, 3.8, 7.6, 11.4, 15.2, 19, 22.8, 26.6
-        for (int i = 0; i < totalGrades; i++)
+        foreach (var grade in grades)
+
         {
-            if(grades[i].PercentageToAssign == 0) continue;
+            if (grade.PercentageToAssign == 0) continue;
 
-            double percentage = grades[i].PercentageToAssign / 100;
-            double distribution = percentage * totalEmployees ;
+            double distribution = (grade.PercentageToAssign / 100.0) * totalEmployees;
+            int toTake = (int)Math.Round(distribution + lastSkip);
+            toTake = Math.Min(toTake, totalEmployees - assignedCount); // Ensure we don't exceed available employees
 
-            int toTaken = (int)Math.Round(((int)Math.Round(distribution + lastSkip))- lastSkip);
-            int toSkip = (int)Math.Round(lastSkip);
-
-
-            if(toTaken >= 1)
+            if (toTake > 0)
             {
-                var setOfEmployee = employees.Skip(toSkip).Take(toTaken);
-                Console.WriteLine("Take {0} Skip {1} LastSkip {2} Per% {3} Dist {4}", toTaken, toSkip, lastSkip, percentage, distribution );
-
-                foreach (var emp in setOfEmployee)
+                var setOfEmployees = employees.Skip(assignedCount).Take(toTake).ToList();
+                foreach (var emp in setOfEmployees)
                 {
-                    emp.Grade = grades[i].Name;
-                    emp.GradeRank = grades[i].Rank;
+                    emp.Grade = grade.Name;
+                    emp.GradeRank = grade.Rank;
                 }
-                employeesNew.AddRange(setOfEmployee);
+                assignedCount += toTake;
             }
-            lastSkip += distribution;
+
+            lastSkip += distribution - toTake; // Track rounding impact for the next iteration
         }
 
-        // Print the results
-        foreach (var emp in employeesNew)
+        // Print results
+        foreach (var emp in employees)
         {
             Console.WriteLine($"{emp.Name} - Grade: {emp.Grade}, Rank: {emp.GradeRank}");
         }
+        Console.WriteLine("employees.Count " + employees.Count);
         Console.WriteLine("lastSkip " + lastSkip);
-        Console.WriteLine("Total " + employeesNew.Count);
-        return true;
+        Console.WriteLine("assignedCount " + assignedCount);
+        Console.WriteLine("totalEmployees " + totalEmployees);
     }
 }
