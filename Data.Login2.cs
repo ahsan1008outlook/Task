@@ -11,8 +11,10 @@ public static partial class Data
 
         {
             if (grade.PercentageToAssign == 0) continue;
+            
+            double percentage = grade.PercentageToAssign / 100.0;
+            double distribution = percentage * totalEmployees;
 
-            double distribution = (grade.PercentageToAssign / 100.0) * totalEmployees;
             int toTake = (int)Math.Round(distribution + lastSkip);
             toTake = Math.Min(toTake, totalEmployees - assignedCount); // Ensure we don't exceed available employees
 
@@ -26,7 +28,8 @@ public static partial class Data
                 }
                 assignedCount += toTake;
             }
-
+            Console.WriteLine("Take {0} Skip {1} LastSkip {2} Per% {3} Dist {4}", toTake, assignedCount, lastSkip, percentage, distribution );
+            
             lastSkip += distribution - toTake; // Track rounding impact for the next iteration
         }
 
