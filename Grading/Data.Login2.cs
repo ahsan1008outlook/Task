@@ -41,13 +41,7 @@ public static partial class Data
 
             }
             // Handle Carry Forward Decimals
-            {
-                if (toTaken > distribution)
-                    carryForward += distribution - toTaken;
-                else if (toTaken < distribution)
-                    carryForward += distribution - toTaken;
-            }
-
+            carryForward += distribution - toTaken;
 
             lastSkip += distribution;
         }
