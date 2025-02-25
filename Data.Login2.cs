@@ -1,46 +1,63 @@
 ﻿namespace MyConsoleApp;
 public static partial class Data
 {
-    public static void AssignGrades2(List<Employee> employees, List<Grade> grades)
+    private static int ConvertToIntReq(double value)
+    {
+        int toSkip = (int)Math.Round(value);
+        if (value % 1 == 0.5)
+            toSkip = (int)Math.Ceiling(value);
+        return toSkip;
+    }
+    public static bool AssignGrades2(List<Employee> employees, List<Grade> grades)
     {
         int totalEmployees = employees.Count;
-        double lastSkip = 0;
-        int assignedCount = 0;
+        int totalGrades = grades.Count;
 
-        foreach (var grade in grades)
+        bool result = GradesGreaterThanEmployee(employees, grades);
+        if (result) return result;
 
+        List<Employee> employeesNew = new List<Employee>();
+        double lastSkip = 0; // 0, 3.8, 7.6, 11.4, 15.2, 19, 22.8, 26.6
+        double carryForward = 0;
+        for (int i = 0; i < totalGrades; i++)
         {
-            if (grade.PercentageToAssign == 0) continue;
-            
-            double percentage = grade.PercentageToAssign / 100.0;
+            if (grades[i].PercentageToAssign == 0) continue;
+
+            double percentage = grades[i].PercentageToAssign / 100;
             double distribution = percentage * totalEmployees;
+            // 1.5,    3    2.25    1.5     1.5     2.25    1.5     .75     .75
+            // -.5,    -.5  -.25    -.75    -1.5    -1.25   -2.25   
+            // 2,      3    2        
+            int toTaken = ConvertToIntReq(distribution + carryForward);
+            int toSkip = ConvertToIntReq(lastSkip);
 
-            int toTake = (int)Math.Round(distribution + lastSkip);
-            toTake = Math.Min(toTake, totalEmployees - assignedCount); // Ensure we don't exceed available employees
-
-            if (toTake > 0)
+            if (toTaken >= 1)
             {
-                var setOfEmployees = employees.Skip(assignedCount).Take(toTake).ToList();
-                foreach (var emp in setOfEmployees)
-                {
-                    emp.Grade = grade.Name;
-                    emp.GradeRank = grade.Rank;
-                }
-                assignedCount += toTake;
-            }
-            Console.WriteLine("Take {0} Skip {1} LastSkip {2} Per% {3} Dist {4}", toTake, assignedCount, lastSkip, percentage, distribution );
-            
-            lastSkip += distribution - toTake; // Track rounding impact for the next iteration
-        }
+                var setOfEmployee = employees.Skip(toSkip).Take(toTaken);
+                Console.WriteLine("Take {0} Skip {1} LastSkip {2} Per% {3} Dist {4} carryForward {5}", toTaken, toSkip, lastSkip, percentage, distribution, carryForward);
 
-        // Print results
-        foreach (var emp in employees)
+                foreach (var emp in setOfEmployee)
+                {
+                    emp.Grade = grades[i].Name;
+                    emp.GradeRank = grades[i].Rank;
+                }
+                employeesNew.AddRange(setOfEmployee);
+            }
+            if(toTaken > distribution)
+            carryForward += distribution - toTaken;
+            else if(toTaken < distribution)
+            carryForward += distribution - toTaken;
+
+            lastSkip += distribution;
+        }
+        Console.WriteLine("Total " + lastSkip);
+
+        // Print the results
+        foreach (var emp in employeesNew)
         {
             Console.WriteLine($"{emp.Name} - Grade: {emp.Grade}, Rank: {emp.GradeRank}");
         }
-        Console.WriteLine("employees.Count " + employees.Count);
-        Console.WriteLine("lastSkip " + lastSkip);
-        Console.WriteLine("assignedCount " + assignedCount);
-        Console.WriteLine("totalEmployees " + totalEmployees);
+        Console.WriteLine("Total " + employeesNew.Count);
+        return true;
     }
 }
