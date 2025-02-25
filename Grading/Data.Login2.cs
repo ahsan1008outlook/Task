@@ -56,8 +56,8 @@ public static partial class Data
         {
             Console.WriteLine($"{emp.Name} - Grade: {emp.Grade}, Rank: {emp.GradeRank}");
         }
-        Console.WriteLine("Total " + lastSkip);
-        Console.WriteLine("Total " + employeesNew.Count);
+        Console.WriteLine("Total Skip = " + lastSkip);
+        Console.WriteLine("Total Employee = " + employeesNew.Count);
         return true;
     }
 }
