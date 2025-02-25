@@ -8,17 +8,19 @@ public static partial class Data
             toSkip = (int)Math.Ceiling(value);
         return toSkip;
     }
-    public static bool AssignGrades2(List<Employee> employees, List<Grade> grades)
+    public static List<Employee> AssignGrades2(List<Employee> employees, List<Grade> grades)
     {
         int totalEmployees = employees.Count;
         int totalGrades = grades.Count;
 
-        bool result = GradesGreaterThanEmployee(employees, grades);
-        if (result) return result;
+        // var result = GradesGreaterThanEmployee(employees, grades);
+        // if (result.Count > 0) return result;
 
         List<Employee> employeesNew = new List<Employee>();
+
         double lastSkip = 0;
         double carryForward = 0;
+
         for (int i = 0; i < totalGrades; i++)
         {
             if (grades[i].PercentageToAssign == 0) continue;
@@ -46,12 +48,8 @@ public static partial class Data
             lastSkip += distribution;
         }
 
-        foreach (var emp in employeesNew)
-        {
-            Console.WriteLine($"{emp.Name} - Grade: {emp.Grade}, Rank: {emp.GradeRank}");
-        }
         Console.WriteLine("Total Skip = " + lastSkip);
         Console.WriteLine("Total Employee = " + employeesNew.Count);
-        return true;
+        return employeesNew;
     }
 }
