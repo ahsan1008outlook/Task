@@ -5,7 +5,7 @@ public static partial class Data
     {
         int totalEmployees = employees.Count;
         int totalGrades = grades.Count;
-        double percentage = 1.0 / totalGrades;
+        double percentage = totalGrades / 100.00;
         double distribution = totalEmployees * percentage; // Number of employees in this grade
 
         bool result = GradesGreaterThanEmployee(employees, grades);
@@ -39,6 +39,8 @@ public static partial class Data
         {
             Console.WriteLine($"{emp.Name} - Grade: {emp.Grade}, Rank: {emp.GradeRank}");
         }
+        Console.WriteLine("lastSkip " + lastSkip);
+        Console.WriteLine("Total " + employeesNew.Count);
         return true;
     }
 

@@ -15,26 +15,15 @@ public static partial class Data
         {
             if(grades[i].PercentageToAssign == 0) continue;
 
-            double percentage = 1.0 / grades[i].PercentageToAssign;
-            double distribution = totalEmployees * percentage;
+            double percentage = grades[i].PercentageToAssign / 100;
+            double distribution = percentage * totalEmployees ;
 
-            int difference =   (int)Math.Round(lastSkip);
-            if(difference > lastSkip)
-            {
-                distribution += difference - lastSkip;
-                lastSkip = difference;
-            } 
-            // else if(difference < lastSkip) {
-            //     distribution += lastSkip - difference;
-            //     lastSkip = difference;
-            // }
-
-            int toTaken = (int)Math.Round(distribution);
+            int toTaken = (int)Math.Round(((int)Math.Round(distribution + lastSkip))- lastSkip);
             int toSkip = (int)Math.Round(lastSkip);
 
 
-            // if(toTaken >= 1)
-            // {
+            if(toTaken >= 1)
+            {
                 var setOfEmployee = employees.Skip(toSkip).Take(toTaken);
                 Console.WriteLine("Take {0} Skip {1} LastSkip {2} Per% {3} Dist {4}", toTaken, toSkip, lastSkip, percentage, distribution );
 
@@ -44,20 +33,16 @@ public static partial class Data
                     emp.GradeRank = grades[i].Rank;
                 }
                 employeesNew.AddRange(setOfEmployee);
-            // }
-            
-
-
+            }
             lastSkip += distribution;
-
         }
-        Console.WriteLine("Total " + lastSkip);
 
         // Print the results
         foreach (var emp in employeesNew)
         {
             Console.WriteLine($"{emp.Name} - Grade: {emp.Grade}, Rank: {emp.GradeRank}");
         }
+        Console.WriteLine("lastSkip " + lastSkip);
         Console.WriteLine("Total " + employeesNew.Count);
         return true;
     }
